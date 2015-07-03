@@ -151,13 +151,16 @@ font: 20px bold;
   <div class="col-sm-6 col-md-2 middle"></div>
   <div class="col-sm-6 col-md-8 middle">
     <div class="thumbnail " >
-<form data-bind="submit: addItem">
-    New item:
-    <input data-bind='value: itemToAdd, valueUpdate: "afterkeydown"' />
-    <button type="submit" data-bind="enable: itemToAdd().length > 0">Add</button>
-    <p>Your items:</p>
-    <select multiple="multiple" width="50" data-bind="options: items"> </select>
+<form data-bind="submit:addItem">
+    Add User To List: <input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
+    <button type="submit"  class="btn btn-success" data-bind="enable: itemToAdd().length > 0">Add User</button>
+     <button  class="btn btn-success"data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove User</button>
 </form>
+ 
+<p> Users List:</p>
+<select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems"> </select>
+ 
+
      
     </div>
   </div>
@@ -190,18 +193,27 @@ font: 20px bold;
 
     <script type="text/javascript">
 
-var SimpleListModel = function(items) {
-    this.items = ko.observableArray(items);
+var BetterListModel = function () {
     this.itemToAdd = ko.observable("");
-    this.addItem = function() {
-        if (this.itemToAdd() != "") {
-            this.items.push(this.itemToAdd()); // Adds the item. Writing to the "items" observableArray causes any associated UI to update.
-            this.itemToAdd(""); // Clears the text box, because it's bound to the "itemToAdd" observable
-        }
-    }.bind(this);  // Ensure that "this" is always this view model
+    this.allItems = ko.observableArray(["Raheel", "Rohit", "Yash", "Vijay"]); // Initial items
+    this.selectedItems = ko.observableArray(["Ham"]);                                // Initial selection
+ 
+    this.addItem = function () {
+        if ((this.itemToAdd() != "") && (this.allItems.indexOf(this.itemToAdd()) < 0)) // Prevent blanks and duplicates
+            this.allItems.push(this.itemToAdd());
+        this.itemToAdd(""); // Clear the text box
+    };
+ 
+    this.removeSelected = function () {
+        this.allItems.removeAll(this.selectedItems());
+        this.selectedItems([]); // Clear selection
+    };
+ 
+   
 };
  
-ko.applyBindings(new SimpleListModel(["Alpha", "Beta", "Gamma"]));
+ko.applyBindings(new BetterListModel());
+
     $(document).ready(function() {
        $(".row").hide();
        $(".welcomeNav").show("slow")
