@@ -152,13 +152,12 @@ font: 20px bold;
   <div class="col-sm-6 col-md-8 middle">
     <div class="thumbnail " >
 <form data-bind="submit:addItem">
-    Add User To List: <input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
-    <button type="submit"  class="btn btn-success" data-bind="enable: itemToAdd().length > 0">Add User</button>
-     <button  class="btn btn-success"data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove User</button>
-</form>
- 
+    <p>User Directory</p><input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' /><p></p>
+    <p><button type="submit"  class="btn btn-success" data-bind="enable: itemToAdd().length > 0">Add User</button>
+     <button  class="btn btn-success"data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove User</button></p>
+
 <p> Users List:</p>
-<select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems"> </select>
+<select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems" style="width:200px"> </select>
  
 
      
