@@ -38,6 +38,13 @@
 cursor: pointer;
 font: 20px bold;
 }
+.footer{
+  vertical-align: middle;
+  text-align: center;
+  color: grey;
+  font: 30px bold;
+}
+
 </style>
   <body onload="updateClock()">
 
@@ -75,7 +82,21 @@ font: 20px bold;
     <div class="container">
        <div id="weather"class="jumbotron">
         <div class="container">
-   
+   <div class="row welcomeNav">
+  <div class="col-sm-6 col-md-4 middle">
+  </div>
+  <div class="col-sm-6 col-md-4 middle ">
+    <div class="thumbnail " >
+       <p></p>
+       <img src="images/protegrity.jpg" class="img">
+       <p></p>
+      <p>Welcome to the demo page created for Protegrity.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4 middle">
+  </div>
+  </div>
   <div class="row weatherNav">
   <div class="col-sm-6 col-md-4 middle">
   </div>
@@ -126,6 +147,23 @@ font: 20px bold;
   <div class="col-sm-6 col-md-2 middle"></div>
   
   </div>
+  <div class="row userNav">
+  <div class="col-sm-6 col-md-2 middle"></div>
+  <div class="col-sm-6 col-md-8 middle">
+    <div class="thumbnail " >
+<form data-bind="submit: addItem">
+    New item:
+    <input data-bind='value: itemToAdd, valueUpdate: "afterkeydown"' />
+    <button type="submit" data-bind="enable: itemToAdd().length > 0">Add</button>
+    <p>Your items:</p>
+    <select multiple="multiple" width="50" data-bind="options: items"> </select>
+</form>
+     
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-2 middle"></div>
+  
+  </div>
 </div>
 </div>
 </div>
@@ -148,8 +186,25 @@ font: 20px bold;
     <script src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/js/flipclock.css">
     <script src="/js/flipclock.js"></script>
+    <script type='text/javascript' src='js/knockout-3.3.0.js'></script>
+
     <script type="text/javascript">
+
+var SimpleListModel = function(items) {
+    this.items = ko.observableArray(items);
+    this.itemToAdd = ko.observable("");
+    this.addItem = function() {
+        if (this.itemToAdd() != "") {
+            this.items.push(this.itemToAdd()); // Adds the item. Writing to the "items" observableArray causes any associated UI to update.
+            this.itemToAdd(""); // Clears the text box, because it's bound to the "itemToAdd" observable
+        }
+    }.bind(this);  // Ensure that "this" is always this view model
+};
+ 
+ko.applyBindings(new SimpleListModel(["Alpha", "Beta", "Gamma"]));
     $(document).ready(function() {
+       $(".row").hide();
+       $(".welcomeNav").show("slow")
       $(".navItem").click(function(){
             $(".row").hide();
             if($(this).attr("id")=="wthr"){
@@ -185,7 +240,21 @@ font: 20px bold;
       $(".weather").html("");
       $(elem).parent().parent().find(".img").attr("src","/images/"+$( elem ).val()+".jpg")
     }
-
+    var color=["white", "blue", "yellow","green"];
+    var count=0;
+   setInterval(function(){ 
+  
+    $(".footer").css("background-color",color[count]) 
+    if(count<3){
+       $(".footer").html("<span style='text-align:center'>Next Color to be updated after 5 Seconds :"+color[count+1]+"</span>")
+      count++;
+    }else if(count==3){
+      $(".footer").html("<span style='text-align:center'>Next Color to be updated after 5 Seconds :"+color[0]+"</span>")
+      count++;
+    }else{
+      count=0;
+    }
+    }, 5000);
     </script>
    
   </body>
